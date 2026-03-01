@@ -12,7 +12,7 @@ STAR_BIN="/software/lmod/modules/quay.io/biocontainers/star/2.7.11b--h5ca1c30_6/
 GENOME_DIR="/storage/working_data/xli7/notch_rbpj/refs/star_index_GRCm39_109"
 
 # >>> 改这两个变量即可复用到别的样本 <<<
-FASTQ_DIR="/storage/raw_data/groups/benedito/new/xli7_first_notch_vs_rbpj/First_Notch_vs_Rbpj_MPI_analysis/Control/GEX/Control_3sep24_GeX"
+FASTQ_DIR="/storage/working_data/xli7/notch_rbpj/fastq/Control/GEX/Control_3sep24_GeX"
 OUT_DIR="/storage/working_data/xli7/notch_rbpj/counts/Control_GEX"
 
 mkdir -p "$OUT_DIR"
