@@ -3,8 +3,8 @@
 #SBATCH -t 08:00:00
 #SBATCH --cpus-per-task=18
 #SBATCH --mem=80G
-#SBATCH -o ~/data_storage/working_data/notch_rbpj/logs/%x_%j.out
-#SBATCH -e ~/data_storage/working_data/notch_rbpj/logs/%x_%j.err
+#SBATCH -o /storage/working_data/xli7/notch_rbpj/logs/%x_%j.out
+#SBATCH -e /storage/working_data/xli7/notch_rbpj/logs/%x_%j.err
 
 set -euo pipefail
 
