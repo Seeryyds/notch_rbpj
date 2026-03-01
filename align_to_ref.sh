@@ -47,6 +47,7 @@ test -x "$STAR_BIN"
   --readFilesCommand zcat \
   --readFilesIn "$R2_LIST" "$R1_LIST" \
   --runThreadN "${SLURM_CPUS_PER_TASK}" \
+  --soloCBwhitelist /storage/working_data/xli7/notch_rbpj/refs/3M-february-2018.txt \
   --soloCBstart 1 --soloCBlen 16 \
   --soloUMIstart 17 --soloUMIlen 12 \
   --soloBarcodeReadLength 0 \
