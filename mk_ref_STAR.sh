@@ -8,14 +8,17 @@
 
 set -euo pipefail
 
-# STAR 
+# If STAR is provided via modules on your cluster, load it here:
+# module load star
+
 STAR --version
 
 VERSION=109
-BASE=~/data_storage/working_data/notch_rbpj/refs
-gtf_file=${BASE}/Mus_musculus.GRCm39.${VERSION}.gtf
-fasta_file=${BASE}/Mus_musculus.GRCm39.dna.toplevel.fa
-ref_name=${BASE}/star_index_GRCm39_${VERSION}
+BASE="$HOME/data_storage/working_data/notch_rbpj/refs"
+
+gtf_file="${BASE}/Mus_musculus.GRCm39.${VERSION}.gtf"
+fasta_file="${BASE}/Mus_musculus.GRCm39.dna.toplevel.fa"
+ref_name="${BASE}/star_index_GRCm39_${VERSION}"
 
 mkdir -p "$ref_name"
 ls -lh "$gtf_file" "$fasta_file"
