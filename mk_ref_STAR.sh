@@ -8,14 +8,12 @@
 
 set -euo pipefail
 
-# If STAR is provided via modules on your cluster, load it here:
-# module load star
-
-STAR --version
+STAR_BIN="/software/lmod/modules/quay.io/biocontainers/star/2.7.11b--h5ca1c30_6/bin/STAR"
+test -x "$STAR_BIN"
+"$STAR_BIN" --version
 
 VERSION=109
 BASE="$HOME/data_storage/working_data/notch_rbpj/refs"
-
 gtf_file="${BASE}/Mus_musculus.GRCm39.${VERSION}.gtf"
 fasta_file="${BASE}/Mus_musculus.GRCm39.dna.toplevel.fa"
 ref_name="${BASE}/star_index_GRCm39_${VERSION}"
@@ -23,7 +21,7 @@ ref_name="${BASE}/star_index_GRCm39_${VERSION}"
 mkdir -p "$ref_name"
 ls -lh "$gtf_file" "$fasta_file"
 
-STAR --runMode genomeGenerate \
+"$STAR_BIN" --runMode genomeGenerate \
   --runThreadN "${SLURM_CPUS_PER_TASK}" \
   --genomeDir "$ref_name" \
   --genomeFastaFiles "$fasta_file" \
