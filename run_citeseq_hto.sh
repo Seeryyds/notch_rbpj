@@ -37,4 +37,3 @@ R2=$(ls -1 ${FASTQ_DIR}/*_R2_*.fastq.gz | sort | paste -sd, -)
   -wl "$WHITELIST" \
   -T "${SLURM_CPUS_PER_TASK}" \
   -o "$OUT"
-SB
