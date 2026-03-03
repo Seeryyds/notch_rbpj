@@ -15,7 +15,7 @@ ENV_NAME=citeseq310
 
 PROJECT=/storage/working_data/xli7/notch_rbpj
 FASTQ_DIR="${PROJECT}/fastq/Control/HTO/Control_3sep24_HTO"
-TAGS="${PROJECT}/refs/hto_tags.csv"
+TAGS="/storage/working_data/xli7/notch_rbpj/refs/hto_tags.clean.csv"
 WHITELIST="${PROJECT}/refs/3M-february-2018.txt"
 OUT="${PROJECT}/counts/Control_HTO_citeseq"
 EXPECTED_CELLS=25000
