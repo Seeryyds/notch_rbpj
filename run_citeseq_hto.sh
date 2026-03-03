@@ -1,8 +1,8 @@
 #!/bin/bash
 #SBATCH -J CITE_Control_HTO
-#SBATCH -t 06:00:00
+#SBATCH -t 024:00:00
 #SBATCH --cpus-per-task=8
-#SBATCH --mem=32G
+#SBATCH --mem=80G
 #SBATCH -o /storage/working_data/xli7/notch_rbpj/logs/%x_%j.out
 #SBATCH -e /storage/working_data/xli7/notch_rbpj/logs/%x_%j.err
 
