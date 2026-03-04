@@ -45,9 +45,9 @@ for g in "${GROUPS[@]}"; do
 
     mkdir -p "$OUT_DIR"
     cd "$OUT_DIR"
-
-    mapfile -t R1 < <(ls -1 ${sample_dir}/*_R1_*.fastq.gz | sort)
-    mapfile -t R2 < <(ls -1 ${sample_dir}/*_R2_*.fastq.gz | sort)
+    
+    mapfile -t R1 < <(find "$sample_dir" -maxdepth 1 -type f -name "*_R1_*.fastq.gz" | sort)
+    mapfile -t R2 < <(find "$sample_dir" -maxdepth 1 -type f -name "*_R2_*.fastq.gz" | sort)
 
     echo "R1 count: ${#R1[@]}"
     echo "R2 count: ${#R2[@]}"
