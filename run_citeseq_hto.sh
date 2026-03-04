@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -J CITE_Control_HTO
 #SBATCH -t 024:00:00
-#SBATCH --cpus-per-task=8
+#SBATCH --cpus-per-task=4
 #SBATCH --mem=80G
 #SBATCH -o /storage/working_data/xli7/notch_rbpj/logs/%x_%j.out
 #SBATCH -e /storage/working_data/xli7/notch_rbpj/logs/%x_%j.err
@@ -32,7 +32,7 @@ R2=$(ls -1 ${FASTQ_DIR}/*_R2_*.fastq.gz | sort | paste -sd, -)
   -R2 "$R2" \
   -t "$TAGS" \
   -cbf 1 -cbl 16 \
-  -umif 17 -umil 12 \
+  -umif 17 -umil 28 \
   -cells "$EXPECTED_CELLS" \
   -wl "$WHITELIST" \
   -T "${SLURM_CPUS_PER_TASK}" \
