@@ -27,5 +27,5 @@ ls -lh "$gtf_file" "$fasta_file"
   --genomeDir "$ref_name" \
   --genomeFastaFiles "$fasta_file" \
   --sjdbGTFfile "$gtf_file" \
-  --sjdbOverhang 99
+  --sjdbOverhang 89
 
