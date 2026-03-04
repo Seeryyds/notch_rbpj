@@ -1,4 +1,4 @@
-#!/bin/bash
+/bin/bash
 #SBATCH -J solo_all_GEX
 #SBATCH -t 48:00:00
 #SBATCH --cpus-per-task=16
@@ -7,6 +7,7 @@
 #SBATCH -e /storage/working_data/xli7/notch_rbpj/logs/%x_%j.err
 
 set -euo pipefail
+unset GROUPS  
 
 STAR_BIN="/software/lmod/modules/quay.io/biocontainers/star/2.7.11b--h5ca1c30_6/bin/STAR"
 GENOME_DIR="/storage/working_data/xli7/notch_rbpj/refs/star_index_GRCm39_109_plusTG"
@@ -21,7 +22,7 @@ test -x "$STAR_BIN"
 "$STAR_BIN" --version
 ls -lh "$GENOME_DIR" | head
 
-# 你要跑的组
+# 你要跑的组（不含Control）
 GROUPS=(N1ICD N1N4 N1_block_Ab Rbpj)
 
 echo "SCRIPT: $0"
@@ -29,26 +30,19 @@ echo "FASTQ_BASE=$FASTQ_BASE"
 echo "GROUPS=${GROUPS[*]}"
 
 for g in "${GROUPS[@]}"; do
-  echo "ITER g=$g"
   gex_root="${FASTQ_BASE}/${g}/GEX"
-  echo "gex_root=$gex_root"
-  ...
-done
-
-for g in "${GROUPS[@]}"; do
-  gex_root="${FASTQ_BASE}/${g}/GEX"
+  echo "==== $gex_root ===="
   if [ ! -d "$gex_root" ]; then
     echo "[SKIP] no GEX folder: $gex_root"
     continue
   fi
 
-  # 每个样本一个子文件夹（例如 Control_3sep24_GeX）
   for sample_dir in "$gex_root"/*/; do
     [ -d "$sample_dir" ] || continue
     sample_name="$(basename "$sample_dir")"
     OUT_DIR="${OUT_BASE}/${g}_${sample_name}_plusTG"
 
-    echo "======================================"
+    echo "--------------------------------------"
     echo "Group:  $g"
     echo "Sample: $sample_name"
     echo "FASTQ:  $sample_dir"
@@ -56,7 +50,7 @@ for g in "${GROUPS[@]}"; do
 
     mkdir -p "$OUT_DIR"
     cd "$OUT_DIR"
-    
+
     mapfile -t R1 < <(find "$sample_dir" -maxdepth 1 -type f -name "*_R1_*.fastq.gz" | sort)
     mapfile -t R2 < <(find "$sample_dir" -maxdepth 1 -type f -name "*_R2_*.fastq.gz" | sort)
 
