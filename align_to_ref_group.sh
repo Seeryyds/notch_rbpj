@@ -24,6 +24,17 @@ ls -lh "$GENOME_DIR" | head
 # 你要跑的组
 GROUPS=(N1ICD N1N4 N1_block_Ab Rbpj)
 
+echo "SCRIPT: $0"
+echo "FASTQ_BASE=$FASTQ_BASE"
+echo "GROUPS=${GROUPS[*]}"
+
+for g in "${GROUPS[@]}"; do
+  echo "ITER g=$g"
+  gex_root="${FASTQ_BASE}/${g}/GEX"
+  echo "gex_root=$gex_root"
+  ...
+done
+
 for g in "${GROUPS[@]}"; do
   gex_root="${FASTQ_BASE}/${g}/GEX"
   if [ ! -d "$gex_root" ]; then
