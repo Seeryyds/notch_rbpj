@@ -1,4 +1,4 @@
-/bin/bash
+#!/bin/bash
 #SBATCH -J solo_all_GEX
 #SBATCH -t 48:00:00
 #SBATCH --cpus-per-task=16
