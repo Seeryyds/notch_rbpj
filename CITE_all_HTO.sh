@@ -24,7 +24,7 @@ LOG_BASE="${PROJECT}/logs"
 mkdir -p "$OUT_BASE" "$LOG_BASE"
 
 # 只跑4组（不含Control）
-GROUPS=(N1ICD N1N4 N1_block_Ab Rbpj)
+GROUPS=( Control N1ICD N1N4 N1_block_Ab Rbpj)
 
 test -x "$MAMBA_BIN"
 "$MAMBA_BIN" run -n "$ENV_NAME" CITE-seq-Count --version || true
@@ -79,7 +79,7 @@ for g in "${GROUPS[@]}"; do
       -R2 "$R2" \
       -t "$TAGS" \
       -cbf 1 -cbl 16 \
-      -umif 17 -umil 28 \
+      -umif 17 -umil 12 \
       -cells "$CELLS" \
       -wl "$WHITELIST" \
       -T "${SLURM_CPUS_PER_TASK}" \
