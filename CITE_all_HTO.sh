@@ -21,10 +21,13 @@ WHITELIST="${PROJECT}/refs/3M-february-2018.txt"
 OUT_BASE="${PROJECT}/counts"
 LOG_BASE="${PROJECT}/logs"
 
+# 关键：tag barcode 在 R2 的第 11bp 开始，所以需要裁掉前 10bp
+START_TRIM=10
+
 mkdir -p "$OUT_BASE" "$LOG_BASE"
 
-# 只跑4组（不含Control）
-GROUPS=( Control N1ICD N1N4 N1_block_Ab Rbpj)
+# 跑 5 组（含 Control）
+GROUPS=( Control N1ICD N1N4 N1_block_Ab Rbpj )
 
 test -x "$MAMBA_BIN"
 "$MAMBA_BIN" run -n "$ENV_NAME" CITE-seq-Count --version || true
@@ -33,6 +36,7 @@ echo "PROJECT=$PROJECT"
 echo "GROUPS=${GROUPS[*]}"
 echo "TAGS=$TAGS"
 echo "WHITELIST=$WHITELIST"
+echo "START_TRIM=$START_TRIM"
 
 for g in "${GROUPS[@]}"; do
   # 按组设置 -cells（来自GEX filtered cells ×1.2）
@@ -42,7 +46,7 @@ for g in "${GROUPS[@]}"; do
     N1N4)         CELLS=23253 ;;
     N1_block_Ab)  CELLS=26485 ;;
     Rbpj)         CELLS=18464 ;;
-    *)            CELLS=25000 ;;  # 兜底
+    *)            CELLS=25000 ;;
   esac
   echo ">>> $g  use -cells $CELLS"
 
@@ -60,6 +64,14 @@ for g in "${GROUPS[@]}"; do
     OUT="${OUT_BASE}/${g}_${sample_name}_citeseq"
     mkdir -p "$OUT"
 
+    # 如果已经跑过就跳过
+    if [ -s "$OUT/run_report.yaml" ]; then
+      if grep -q "Percentage mapped" "$OUT/run_report.yaml" 2>/dev/null; then
+        echo "[SKIP DONE] $OUT (run_report.yaml exists)"
+        continue
+      fi
+    fi
+
     echo "======================================"
     echo "Group:  $g"
     echo "Sample: $sample_name"
@@ -74,6 +86,7 @@ for g in "${GROUPS[@]}"; do
       continue
     fi
 
+    echo "[RUN] CITE-seq-Count with --start-trim $START_TRIM"
     "$MAMBA_BIN" run -n "$ENV_NAME" \
       CITE-seq-Count \
       -R1 "$R1" \
@@ -83,8 +96,15 @@ for g in "${GROUPS[@]}"; do
       -umif 17 -umil 28 \
       -cells "$CELLS" \
       -wl "$WHITELIST" \
+      --start-trim "$START_TRIM" \
       -T "${SLURM_CPUS_PER_TASK}" \
       -o "$OUT"
+
+    # 结束后快速打印 mapped/unmapped（方便你在log里直接看到）
+    if [ -f "$OUT/run_report.yaml" ]; then
+      echo "[REPORT] $OUT"
+      grep -E "Reads processed|Percentage mapped|Percentage unmapped" "$OUT/run_report.yaml" || true
+    fi
   done
 done
 
