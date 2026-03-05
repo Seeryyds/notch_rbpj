@@ -23,6 +23,11 @@ LOG_BASE="${PROJECT}/logs"
 
 mkdir -p "$OUT_BASE" "$LOG_BASE"
 
+if [ -f "$OUT/umi_count/matrix.mtx.gz" ] || [ -f "$OUT/umi_count/matrix.mtx" ]; then
+  echo "[SKIP DONE] $OUT already has umi_count matrix"
+  continue
+fi
+
 # 只跑4组（不含Control）
 GROUPS=( Control N1ICD N1N4 N1_block_Ab Rbpj)
 
