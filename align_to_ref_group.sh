@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -J solo_all_GEX
+#SBATCH -J solo_all_GEX_velo
 #SBATCH -t 48:00:00
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=80G
@@ -7,7 +7,7 @@
 #SBATCH -e /storage/working_data/xli7/notch_rbpj/logs/%x_%j.err
 
 set -euo pipefail
-unset GROUPS  
+unset GROUPS
 
 STAR_BIN="/software/lmod/modules/quay.io/biocontainers/star/2.7.11b--h5ca1c30_6/bin/STAR"
 GENOME_DIR="/storage/working_data/xli7/notch_rbpj/refs/star_index_GRCm39_109_plusTG"
@@ -22,8 +22,8 @@ test -x "$STAR_BIN"
 "$STAR_BIN" --version
 ls -lh "$GENOME_DIR" | head
 
-# 你要跑的组（不含Control）
-GROUPS=(N1ICD N1N4 N1_block_Ab Rbpj)
+# 5个组都跑（含Control）
+GROUPS=(Control N1ICD N1N4 N1_block_Ab Rbpj)
 
 echo "SCRIPT: $0"
 echo "FASTQ_BASE=$FASTQ_BASE"
@@ -40,7 +40,15 @@ for g in "${GROUPS[@]}"; do
   for sample_dir in "$gex_root"/*/; do
     [ -d "$sample_dir" ] || continue
     sample_name="$(basename "$sample_dir")"
-    OUT_DIR="${OUT_BASE}/${g}_${sample_name}_plusTG"
+
+    # 新输出目录：避免覆盖原来的 *_plusTG
+    OUT_DIR="${OUT_BASE}/${g}_${sample_name}_velocyto"
+
+    # 如果Velocyto结果已经存在，就跳过
+    if [ -f "${OUT_DIR}/Solo.out/Velocyto/filtered/spliced.mtx.gz" ]; then
+      echo "[SKIP DONE] Velocyto exists: $OUT_DIR"
+      continue
+    fi
 
     echo "--------------------------------------"
     echo "Group:  $g"
@@ -84,10 +92,9 @@ for g in "${GROUPS[@]}"; do
       --soloCBmatchWLtype 1MM_multi_Nbase_pseudocounts \
       --outFilterMismatchNoverLmax 0.05 \
       --outFilterMatchNmin 15 \
-      --soloFeatures Gene \
+      --soloFeatures Gene Velocyto \
       --soloMultiMappers EM \
-      --outSAMtype BAM SortedByCoordinate \
-      --outSAMattributes NH HI AS nM GX GN CB UB \
+      --outSAMtype None \
       --outTmpDir "${OUT_DIR}/_STARtmp" \
       --outFileNamePrefix "${OUT_DIR}/"
   done
