@@ -23,11 +23,6 @@ LOG_BASE="${PROJECT}/logs"
 
 mkdir -p "$OUT_BASE" "$LOG_BASE"
 
-if [ -f "$OUT/umi_count/matrix.mtx.gz" ] || [ -f "$OUT/umi_count/matrix.mtx" ]; then
-  echo "[SKIP DONE] $OUT already has umi_count matrix"
-  continue
-fi
-
 # 只跑4组（不含Control）
 GROUPS=( Control N1ICD N1N4 N1_block_Ab Rbpj)
 
@@ -85,7 +80,7 @@ for g in "${GROUPS[@]}"; do
       -R2 "$R2" \
       -t "$TAGS" \
       -cbf 1 -cbl 16 \
-      -umif 17 -umil 12 \
+      -umif 17 -umil 28 \
       -cells "$CELLS" \
       -wl "$WHITELIST" \
       -T "${SLURM_CPUS_PER_TASK}" \
