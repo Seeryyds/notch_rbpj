@@ -37,6 +37,7 @@ echo "WHITELIST=$WHITELIST"
 for g in "${GROUPS[@]}"; do
   # 按组设置 -cells（来自GEX filtered cells ×1.2）
   case "$g" in
+    Control)      CELLS=21512 ;;
     N1ICD)        CELLS=23148 ;;
     N1N4)         CELLS=23253 ;;
     N1_block_Ab)  CELLS=26485 ;;
